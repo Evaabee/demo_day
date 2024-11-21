@@ -199,7 +199,7 @@ def make_call(phone_number: str):
 
     try:
         call = client.calls.create(
-            twiml="<Response><Say>Hello, this is HodlUp Team calling! Stay alert for cryptocurrency updates.</Say></Response>",
+            twiml="<Response><Say>Hello, this is HodlUp Team calling! Wake up! Your Bitcoin just hit the threshold you set—don’t snooze while your wallet cries! Check it now or regret later!</Say></Response>",
             to=phone_number,
             from_=TWILIO_PHONE_NUMBER,
         )
