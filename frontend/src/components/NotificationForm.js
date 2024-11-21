@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import "./NotificationForm.css";
+import React, { useState } from 'react';
+import '../styles/NotificationForm.css';
 import Button from "./Button";
 import Dropdown from "./Dropdown";
 import axios from "axios";

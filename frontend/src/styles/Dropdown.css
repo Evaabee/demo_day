@@ -1,0 +1,28 @@
+/* Dropdown.css */
+.dropdown-container {
+  position: relative;
+}
+
+.dropdown-container select {
+  appearance: none;
+  background-color: #1E2530;
+  border: 1px solid #3D4555;
+  color: #ffffff;
+  padding: 14px 40px 14px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.dropdown-container::after {
+  content: '';
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: solid #8B8F95;
+  border-width: 0 2px 2px 0;
+  padding: 3px;
+  transform: translateY(-50%) rotate(45deg);
+}
+

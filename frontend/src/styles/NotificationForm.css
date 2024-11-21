@@ -1,0 +1,56 @@
+/* src/styles/NotificationForm.css */
+.notification-form {
+  background-color: #252D3A;
+  border-radius: 12px;
+  padding: 40px;
+  margin: 50px auto;
+  max-width: 500px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.notification-form h2 {
+  color: #FF6B8B;
+  font-size: 35px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.form-group {
+  margin-bottom: 35px;
+}
+
+.form-group label {
+  display: block;
+  color: #ffffff;
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.form-group select,
+.form-group input {
+  width: 100%;
+  padding: 14px;
+  background-color: #1E2530;
+  border: 1px solid #3D4555;
+  border-radius: 6px;
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.submit-button {
+  background-color: #FF6B8B;
+  color: #ffffff;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+  background-color: #ff5277;
+}

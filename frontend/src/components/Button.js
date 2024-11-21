@@ -1,6 +1,6 @@
 // src/components/Button.js
 import React from 'react';
-import './Button.css'; // Import CSS file
+import '../styles/Button.css';
 
 export default function Button({ text, onClick }) {
   return (

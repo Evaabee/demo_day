@@ -1,7 +1,9 @@
+// src/App.js
 import React, { useState, useEffect, useCallback } from "react";
-import "./App.css";
+import './styles/App.css';
 import NotificationForm from "./components/NotificationForm";
 import Confirmation from "./components/Confirmation";
+import Header from "./components/Header";  
 import axios from "axios";
 
 function App() {
@@ -12,7 +14,6 @@ function App() {
 
   const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
 
-  // Fetch cryptocurrencies from backend
   const fetchCryptocurrencies = useCallback(async () => {
     setLoading(true);
     try {
@@ -38,28 +39,24 @@ function App() {
 
   return (
     <div className="App">
-      <div style={{ textAlign: "center", marginBottom: "20px" }}>
-        <button onClick={fetchCryptocurrencies} disabled={loading}>
-          {loading ? "Fetching..." : "Fetch Cryptocurrencies"}
-        </button>
-      </div>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <Header />
+      {error && <p className="error-message">{error}</p>}
       {!loading && (
-        <>
-          <NotificationForm
-            onSubmit={handleSubmit}
-            cryptocurrencies={cryptocurrencies}
-          />
-        </>
+        <NotificationForm
+          onSubmit={handleSubmit}
+          cryptocurrencies={cryptocurrencies}
+        />
       )}
       {alertData && (
         <Confirmation
           alertData={alertData}
           onModify={() => setAlertData(null)}
+          onClose={() => setAlertData(null)}
         />
       )}
     </div>
   );
 }
+
 
 export default App;

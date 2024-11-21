@@ -1,0 +1,21 @@
+/* src/styles/App.css */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #1E2530;
+  color: #ffffff;
+}
+
+.App {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #1E2530;
+  padding: 0;
+  margin: 0;
+}
+
+.error-message {
+  color: #ff4444;
+  text-align: center;
+  margin: 20px 0;
+}

@@ -1,0 +1,13 @@
+/* src/styles/Header.css */
+.app-header {
+  background-color: #1E2530;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 30px;
+}
+
+.app-header h1 {
+  color: #ffffff;
+  font-size: 40px;
+  margin: 0;
+  font-weight: bold;
+}

@@ -1,0 +1,60 @@
+/* src/styles/Confirmation.css */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: #1E2530;
+    padding: 30px;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 400px;
+    position: relative;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  }
+  
+  .modal-content h1 {
+    color: #ffffff;
+    font-size: 28px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .confirmation-details p {
+    color: #8B8F95;
+    font-size: 16px;
+    margin: 10px 0;
+    line-height: 1.6;
+  }
+  
+  .modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: space-between;
+  }
+  
+  .modal-button {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+    background-color: #252D3A;
+    color: #ffffff;
+    border: 1px solid #3D4555;
+    min-width: 120px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .modal-button:hover {
+    background-color: #3D4555;
+  }

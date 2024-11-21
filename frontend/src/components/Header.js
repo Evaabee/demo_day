@@ -1,11 +1,11 @@
 // src/components/Header.js
 import React from 'react';
-import './Header.css';
+import '../styles/Header.css';
 
 const Header = () => {
   return (
     <header className="app-header">
-      <h1>Crypto Alert Manager</h1>
+      <h1>HodlUp!</h1>
     </header>
   );
 };

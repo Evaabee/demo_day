@@ -1,19 +1,29 @@
-// frontend/src/components/Confirmation.js
+// src/components/Confirmation.js
 import React from 'react';
-import Button from './Button';
+import '../styles/Confirmation.css';
 
-export default function Confirmation({ alertData, onModify }) {
+const Confirmation = ({ alertData, onModify }) => {
   return (
-    <div>
-      <h1>Alert Setup Complete!</h1>
-      <p>Cryptocurrency ID: {alertData.crypto_id}</p>
-      <p>Notification Type: {alertData.notification_type}</p>
-      <p>Threshold Value: {alertData.threshold_price}</p>
-      <p>Notification Method: {alertData.notification_method}</p>
-
-      {/* Two buttons for actions */}
-      <Button text="Modify Settings" onClick={onModify} />
-      <Button text="Done" onClick={() => alert('You will be notified for changes!')} />
+    <div className="modal-overlay">
+      <div className="modal-content">
+        <h1>Alert Setup Complete!</h1>
+        <div className="confirmation-details">
+          <p>Cryptocurrency ID: {alertData.crypto_id}</p>
+          <p>Notification Type: {alertData.notification_type}</p>
+          <p>Threshold Value: {alertData.threshold_value}</p>
+          <p>Notification Method: {alertData.notification_method}</p>
+        </div>
+        <div className="modal-buttons">
+          <button className="modal-button" onClick={onModify}>
+            Modify Settings
+          </button>
+          <button className="modal-button">
+            Done
+          </button>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default Confirmation;
