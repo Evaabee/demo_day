@@ -11,6 +11,7 @@ import requests
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+from twilio.rest import Client
 
 # Load environment variables
 load_dotenv()
@@ -42,6 +43,10 @@ SMTP_PORT = 587
 EMAIL_ADDRESS = os.getenv("EMAIL_USER")  # Your email address
 EMAIL_PASSWORD = os.getenv("EMAIL_PASS")  # Your email password or app-specific password
 
+# Twilio Configuration
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+TWILIO_PHONE_NUMBER = os.getenv("TWILIO_PHONE_NUMBER")
 
 # Cryptocurrency model
 class Cryptocurrency(Base):
@@ -145,6 +150,9 @@ def shutdown_event():
 class EmailRequest(BaseModel):
     email: EmailStr
 
+# Phone call request model
+class PhoneCallRequest(BaseModel):
+    phone_number: str
 
 # Function to send email
 def send_email(recipient_email: str):
@@ -181,11 +189,35 @@ def send_email(recipient_email: str):
         raise HTTPException(status_code=500, detail="Failed to send email")
 
 
+# Function to make a phone call using Twilio
+def make_call(phone_number: str):
+    if not TWILIO_ACCOUNT_SID or not TWILIO_AUTH_TOKEN:
+        raise HTTPException(status_code=500, detail="Twilio credentials are missing.")
+
+    # Initialize Twilio Client
+    client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+
+    try:
+        call = client.calls.create(
+            twiml="<Response><Say>Hello, this is HodlUp Team calling! Stay alert for cryptocurrency updates.</Say></Response>",
+            to=phone_number,
+            from_=TWILIO_PHONE_NUMBER,
+        )
+        return {"status": "success", "message": f"Call initiated successfully. Call SID: {call.sid}"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"An error occurred: {e}")
+
+
 # Endpoint to send an email
 @app.post("/send-email/")
 def send_test_email(request: EmailRequest):
     send_email(request.email)
     return {"status": "success", "message": "Email sent successfully"}
+
+# Endpoint to make a phone call
+@app.post("/make-call/")
+def trigger_phone_call(request: PhoneCallRequest):
+    return make_call(request.phone_number)
 
 
 # Endpoint to update cryptocurrencies
@@ -215,3 +247,8 @@ def get_all_cryptocurrencies(db: Session = Depends(get_db)):
         }
         for crypto in cryptos
     ]
+
+@app.post("/alerts/")
+async def create_alert(alert_data: dict):
+    # Your logic here
+    return {"message": "Alert created successfully!"}
