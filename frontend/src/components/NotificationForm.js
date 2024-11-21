@@ -5,9 +5,7 @@ import Dropdown from "./Dropdown";
 import axios from "axios";
 
 const NotificationForm = ({ onSubmit, cryptocurrencies }) => {
-  const [selectedCrypto, setSelectedCrypto] = useState(
-    cryptocurrencies[0]?.id || ""
-  );
+  const [selectedCrypto, setSelectedCrypto] = useState(cryptocurrencies[0]?.id || "");
   const [notificationType, setNotificationType] = useState("Price");
   const [thresholdValue, setThresholdValue] = useState("");
   const [notificationMethod, setNotificationMethod] = useState("Email");
@@ -16,8 +14,16 @@ const NotificationForm = ({ onSubmit, cryptocurrencies }) => {
   const [error, setError] = useState(null);
   const [emailSuccess, setEmailSuccess] = useState(null);
   const [emailError, setEmailError] = useState(null);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [phoneSuccess, setPhoneSuccess] = useState(null);
+  const [phoneError, setPhoneError] = useState('');
 
   const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
+
+  const validatePhoneNumber = (number) => {
+    const phoneRegex = /^\+1\d{10}$/;
+    return phoneRegex.test(number);
+  };
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
@@ -36,16 +42,66 @@ const NotificationForm = ({ onSubmit, cryptocurrencies }) => {
     }
   };
 
+  const handlePhoneNumberSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setPhoneNumber(null);
+    setPhoneSuccess(null);
+    setPhoneError(null);
+
+    // Only make the API call if the notification method is "Phone Call" and phone number is valid
+    if (notificationMethod === 'Phone Call') {
+      if (!validatePhoneNumber(phoneNumber)) {
+        // Catch error for invalid phone number
+        setPhoneError('Please enter a valid phone number (+1XXXXXXXXXX).');
+        return; // Stop further execution
+      }
+
+      try {
+        setLoading(true);
+        const response = await fetch(`${API_URL}/make-call/`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ phone_number: phoneNumber }),
+        });
+
+        const result = await response.json();
+
+        // Handle response from backend
+        if (response.ok) {
+          setPhoneSuccess('Phone call request has been triggered!');
+          setPhoneError(null); // Clear any previous error
+        } else {
+          // Handle backend error
+          setPhoneError(result.error || 'Failed to make the call. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error making phone call:', error);
+        setPhoneError('Failed to make the call. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
   const handleSetAlert = async () => {
     if (!thresholdValue) {
       setError("Threshold value is required.");
       return;
     }
 
+    // Clear error if validation passes
+    setPhoneError('');
+
     const alertData = {
       crypto_id: selectedCrypto,
+      crypto_name: selectedCrypto,
+      notification_type: notificationType,
       threshold_price: parseFloat(thresholdValue),
       notification_method: notificationMethod,
+      phoneNumber: notificationMethod === 'Phone Call' ? phoneNumber : null, // Include phone number only if Phone Call is selected
     };
 
     setLoading(true);
@@ -53,6 +109,7 @@ const NotificationForm = ({ onSubmit, cryptocurrencies }) => {
       const response = await axios.post(`${API_URL}/alerts/`, alertData);
       console.log("Alert created:", response.data);
       onSubmit(alertData);
+      console.log(alertData);
       setError(null);
     } catch (err) {
       console.error("Error setting alert:", err);
@@ -111,7 +168,7 @@ const NotificationForm = ({ onSubmit, cryptocurrencies }) => {
 
       {/* Input for Threshold */}
       <div className="input-group">
-        <label>Set Threshold</label>
+        <label>Set Threshold:</label>
         <input
           type="number"
           value={thresholdValue}
@@ -153,8 +210,37 @@ const NotificationForm = ({ onSubmit, cryptocurrencies }) => {
         </div>
       )}
 
+      {/* Conditional Input for Phone Number */}
+      {notificationMethod === 'Phone Call' && (
+        <div className="phone-section">
+          <form onSubmit={handlePhoneNumberSubmit}>
+            <input
+              type="text"
+              placeholder="+1xxxxxxxxxx"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+              required
+            />
+            {/* Button is disabled if phone number is invalid or loading */}
+            <button type="submit" disabled={loading || (notificationMethod === 'Phone Call' && !validatePhoneNumber(phoneNumber))}>
+              {loading ? "Calling..." : "Call"}
+            </button>
+
+            {/* Only show the error if the phone number is invalid and has been entered */}
+            {phoneNumber && !validatePhoneNumber(phoneNumber) && (
+              <p style={{ color: "red", fontSize: "0.9em" }}>
+                {phoneError || "Please enter a valid phone number (+1xxxxxxxxxx)."}
+              </p>
+            )}
+          </form>
+          {phoneSuccess && <p style={{ color: "green", fontSize: "0.9em" }}>{phoneSuccess}</p>}
+          {phoneError && <p style={{ color: "red" }}>{phoneError}</p>}
+        </div>
+      )}
+      {/* Disaply Error message */}
       {error && <p style={{ color: "red" }}>{error}</p>}
 
+      {/* Submit Button */}
       <Button
         text={loading ? "Setting Alert..." : "Set Alert!"}
         onClick={handleSetAlert}
