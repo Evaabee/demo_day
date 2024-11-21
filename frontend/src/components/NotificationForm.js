@@ -97,7 +97,6 @@ const NotificationForm = ({ onSubmit, cryptocurrencies }) => {
 
     const alertData = {
       crypto_id: selectedCrypto,
-      crypto_name: selectedCrypto,
       notification_type: notificationType,
       threshold_price: parseFloat(thresholdValue),
       notification_method: notificationMethod,
